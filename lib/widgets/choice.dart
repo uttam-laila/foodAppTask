@@ -1,6 +1,6 @@
 class Choice {
-  const Choice({this.title});
+  const Choice({this.title, this.index});
 
   final String title;
-  // final IconData icon;
+  final int index;
 }

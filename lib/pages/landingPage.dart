@@ -11,8 +11,9 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     List<Choice> choices = <Choice>[];
-    for (var item in response[0]['table_menu_list']) {
-      choices.add(Choice(title: item['menu_category']));
+    for (var i = 0; i < response[0]['table_menu_list'].length; i++) {
+      choices.add(Choice(
+          title: response[0]['table_menu_list'][i]['menu_category'], index: i));
     }
 
     return DefaultTabController(
@@ -45,13 +46,14 @@ class _LandingPageState extends State<LandingPage> {
             style: TextStyle(color: Colors.black),
           ),
           bottom: TabBar(
+            indicatorColor: Colors.red,
             isScrollable: true,
             tabs: choices.map((Choice choice) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   choice.title,
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
               );
             }).toList(),
@@ -60,7 +62,7 @@ class _LandingPageState extends State<LandingPage> {
         body: TabBarView(
           children: choices.map((Choice choice) {
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16.0),
               child: ChoiceCard(choice: choice),
             );
           }).toList(),
@@ -77,18 +79,53 @@ class ChoiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textStyle = Theme.of(context).textTheme.bodyText1;
-    return Card(
-      color: Colors.white,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(choice.title, style: textStyle),
-          ],
-        ),
-      ),
-    );
+    return ListView.builder(
+        itemCount: response[0]['table_menu_list'][choice.index]
+                ['category_dishes']
+            .length,
+        itemBuilder: (BuildContext context, int index) {
+          final TextStyle textStyle = Theme.of(context).textTheme.headline6;
+          var data =
+              response[0]['table_menu_list'][choice.index]['category_dishes'];
+          return Container(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                    flex: 4,
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(flex: 1, child: Image.asset('assets/icons/nvicon.png', color: Colors.green,)),
+                            Expanded(
+                                flex: 10, child: Text(data[index]['dish_name']))
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Container(),
+                            Container(),
+                          ],
+                        ),
+                        Container(),
+                        Container(),
+                        Container(),
+                      ],
+                    )),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: 150,
+                    child: Image.network(
+                      data[index]['dish_image'],
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 }
