@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-// import 'package:dio/dio.dart';
-import 'package:foodapptask/blocs/responseBloc.dart';
 import 'package:foodapptask/consts/exports.dart';
-// import 'package:http/http.dart' as http;
 
 class FetchData {
   getDataFromAPI() {

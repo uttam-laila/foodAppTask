@@ -59,11 +59,42 @@ class _LandingPageState extends State<LandingPage> {
                                 style: TextStyle(color: Colors.black),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.shopping_cart,
-                                  color: Colors.black),
-                            )
+                            Stack(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(Icons.shopping_cart,
+                                      color: Colors.black),
+                                ),
+                                Positioned(
+                                  left: 16,
+                                  top: 3.0,
+                                    child: new Stack(
+                                  children: <Widget>[
+                                    new Icon(Icons.brightness_1,
+                                        size: 18.0, color: Colors.red[800]),
+                                    new Positioned(
+                                        top: 4.0,
+                                        right: 6.0,
+                                        child: new Center(
+                                          child: StreamBuilder<int>(
+                                            initialData: 0,
+                                            stream: cartCountBloc.valueStream,
+                                            builder: (context, snapshot) {
+                                              return new Text(
+                                                snapshot.data.toString(),
+                                                style: new TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 11.0,
+                                                    fontWeight: FontWeight.w500),
+                                              );
+                                            }
+                                          ),
+                                        )),
+                                  ],
+                                )),
+                              ],
+                            ),
                           ],
                         ),
                       ],
@@ -116,6 +147,7 @@ class _ChoiceCardState extends State<ChoiceCard> {
 
   @override
   Widget build(BuildContext context) {
+    int _cartCount = 0;
     return ListView.builder(
         itemCount: response[0]['table_menu_list'][widget.choice.index]
                 ['category_dishes']
@@ -214,8 +246,12 @@ class _ChoiceCardState extends State<ChoiceCard> {
                                         if (_count > 0) {
                                           --_count;
                                         }
+                                        if (_cartCount>0) {
+                                          --_cartCount;
+                                        }
                                         _incrementBloc.valueStreamSink
                                             .add(_count);
+                                        cartCountBloc.valueStreamSink.add(_cartCount);
                                       },
                                     ),
                                     StreamBuilder<int>(
@@ -230,8 +266,10 @@ class _ChoiceCardState extends State<ChoiceCard> {
                                       child: Text('+', style: textStyle),
                                       onTap: () {
                                         ++_count;
+                                        ++_cartCount;
                                         _incrementBloc.valueStreamSink
                                             .add(_count);
+                                        cartCountBloc.valueStreamSink.add(_cartCount);
                                       },
                                     )
                                   ],

@@ -14,3 +14,5 @@ class IncrementItem extends Bloc {
     _valueController.close();
   }
 }
+
+IncrementItem cartCountBloc = IncrementItem();
