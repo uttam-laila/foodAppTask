@@ -8,5 +8,9 @@ export 'package:foodapptask/widgets/choice.dart';
 export 'package:foodapptask/blocs/bloc.dart';
 export 'package:foodapptask/blocs/incrementItem.dart';
 
+//services
+export 'package:foodapptask/services/fetchData.dart';
+
 //consts
 export 'package:foodapptask/consts/mockData.dart';
+export 'package:foodapptask/consts/urls.dart';

@@ -1,4 +1,8 @@
-List<Map<String, dynamic>> response = [
+import 'package:foodapptask/consts/exports.dart';
+
+List<Map<String, dynamic>> responseSend = getDataFromAPI();
+List<Map<String, dynamic>> response = responseSend!= null ? responseSend :
+ [
   {
     "restaurant_id": "1010000001",
     "restaurant_name": "UNI Resto Cafe",
