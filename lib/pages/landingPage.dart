@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodapptask/blocs/responseBloc.dart';
 import 'package:foodapptask/consts/exports.dart';
 
 class LandingPage extends StatefulWidget {

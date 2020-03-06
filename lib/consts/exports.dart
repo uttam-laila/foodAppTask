@@ -7,6 +7,7 @@ export 'package:foodapptask/widgets/choice.dart';
 //blocs
 export 'package:foodapptask/blocs/bloc.dart';
 export 'package:foodapptask/blocs/incrementItem.dart';
+export 'package:foodapptask/blocs/responseBloc.dart';
 
 //services
 export 'package:foodapptask/services/fetchData.dart';

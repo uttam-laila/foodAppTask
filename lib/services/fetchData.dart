@@ -9,17 +9,7 @@ import 'package:foodapptask/consts/exports.dart';
 class FetchData {
   getDataFromAPI() {
     List<Map<String, dynamic>> responseBody = [];
-    // try {
-    //   http.get(fetchDataURL).then((value){
-    //     responseBody = jsonDecode(value.body);
-    //   });
-    // } catch (e) {
-    //   log(e);
-    // }
-    // Future.delayed(Duration.zero);
-    // return responseBody;
     HttpClient client = new HttpClient();
-    // Dio dio = new Dio();
     client.badCertificateCallback =
         ((X509Certificate cert, String host, int port) => true);
 
