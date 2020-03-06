@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodapptask/consts/exports.dart';
-import 'package:foodapptask/widgets/choice.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -83,95 +82,137 @@ class ChoiceCard extends StatelessWidget {
                 ['category_dishes']
             .length,
         itemBuilder: (BuildContext context, int index) {
-          // final TextStyle textStyle = Theme.of(context).textTheme.headline6;
+          final TextStyle heading1 = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+          final TextStyle heading2 = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
           var data =
               response[0]['table_menu_list'][choice.index]['category_dishes'];
           int _count = 0;
+          IncrementItem _incrementBloc = IncrementItem();
+          final TextStyle textStyle =
+              TextStyle(color: Colors.white, fontSize: 24);
           return Card(
             margin: EdgeInsets.only(bottom: 8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                    flex: 2,
-                    child: Image.asset(
-                      'assets/icons/nvicon.png',
-                      color: Colors.green,
-                    )),
-                Expanded(
-                    flex: 40,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top:8.0),
+                        child: Image.asset(
+                          'assets/icons/nvicon.png',
+                          color: data[index]['dish_Type'] == 2
+                              ? Colors.green
+                              : Colors.red,
+                        ),
+                      )),
+                  Expanded(
+                      flex: 40,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Expanded(
-                                flex: 10, child: Text(data[index]['dish_name']))
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              child: Text(
-                                  '${data[index]['dish_currency']} ${data[index]['dish_price']}'),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Expanded(
+                                    flex: 10,
+                                    child: Text(data[index]['dish_name'], style: heading1,))
+                              ],
                             ),
-                            Container(
-                              child: Text(
-                                  '${data[index]['dish_calories']} Calories'),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          child: Text('${data[index]['dish_description']}'),
-                        ),
-                        Container(
-                          height: MediaQuery.of(context).size.height / 25,
-                          width: MediaQuery.of(context).size.width / 4,
-                          decoration: new BoxDecoration(
-                              color: Colors
-                                  .green, //new Color.fromRGBO(255, 0, 0, 0.0),
-                              borderRadius:
-                                  new BorderRadius.all(Radius.circular(40.0))),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              GestureDetector(
-                                child: Text('+'),
-                                onTap: () => _count++,
-                              ),
-                              Text(_count.toString()),
-                              GestureDetector(
-                                child: Text('+'),
-                                onTap: () => _count++,
-                              )
-                            ],
-                          ),
-                        ),
-                        data[index]['addonCat'].length > 0
-                            ? Container(
-                                child: Text(
-                                  'Customization available',
-                                  style: TextStyle(color: Colors.red),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  child: Text(
+                                      '${data[index]['dish_currency']} ${data[index]['dish_price']}', style: heading2,),
                                 ),
-                              )
-                            : Container(),
-                      ],
-                    )),
-                Expanded(
-                  flex: 10,
-                  child: Container(
-                    height: 150,
-                    child: Image.network(
-                      data[index]['dish_image'],
-                      fit: BoxFit.fitWidth,
+                                Container(
+                                  child: Text(
+                                      '${data[index]['dish_calories']} Calories', style: heading2,),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(right:8.0, bottom: 8.0, top: 8.0),
+                              child: Text('${data[index]['dish_description']}'),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom:8.0),
+                              child: Container(
+                                height: MediaQuery.of(context).size.height / 25,
+                                width: MediaQuery.of(context).size.width / 4,
+                                decoration: new BoxDecoration(
+                                    color: Colors
+                                        .green, //new Color.fromRGBO(255, 0, 0, 0.0),
+                                    borderRadius: new BorderRadius.all(
+                                        Radius.circular(40.0))),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      child: Text(
+                                        '-',
+                                        style: textStyle,
+                                      ),
+                                      onTap: () {
+                                        if (_count > 0) {
+                                          --_count;
+                                        }
+                                        _incrementBloc.valueStreamSink
+                                            .add(_count);
+                                      },
+                                    ),
+                                    StreamBuilder<int>(
+                                        initialData: 0,
+                                        stream: _incrementBloc.valueStream,
+                                        builder: (context, snapshot) {
+                                          return Text(snapshot.data.toString(),
+                                              style:
+                                                  TextStyle(color: Colors.white));
+                                        }),
+                                    GestureDetector(
+                                      child: Text('+', style: textStyle),
+                                      onTap: () {
+                                        ++_count;
+                                        _incrementBloc.valueStreamSink
+                                            .add(_count);
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            data[index]['addonCat'].length > 0
+                                ? Container(
+                                    child: Text(
+                                      'Customization available',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  )
+                                : Container(),
+                          ],
+                        ),
+                      )),
+                  Expanded(
+                    flex: 10,
+                    child: Container(
+                      height: 80,
+                      width: 80,
+                      child: Image.network(
+                        data[index]['dish_image'],
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           );
         });
