@@ -47,13 +47,15 @@ class _LandingPageState extends State<LandingPage> {
           ),
           bottom: TabBar(
             indicatorColor: Colors.red,
+            labelColor: Colors.red,
+            unselectedLabelColor: Colors.black,
             isScrollable: true,
             tabs: choices.map((Choice choice) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   choice.title,
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  // style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
               );
             }).toList(),
@@ -61,10 +63,7 @@ class _LandingPageState extends State<LandingPage> {
         ),
         body: TabBarView(
           children: choices.map((Choice choice) {
-            return Padding(
-              padding: EdgeInsets.all(16.0),
-              child: ChoiceCard(choice: choice),
-            );
+            return ChoiceCard(choice: choice);
           }).toList(),
         ),
       ),
@@ -84,37 +83,86 @@ class ChoiceCard extends StatelessWidget {
                 ['category_dishes']
             .length,
         itemBuilder: (BuildContext context, int index) {
-          final TextStyle textStyle = Theme.of(context).textTheme.headline6;
+          // final TextStyle textStyle = Theme.of(context).textTheme.headline6;
           var data =
               response[0]['table_menu_list'][choice.index]['category_dishes'];
-          return Container(
+          int _count = 0;
+          return Card(
+            margin: EdgeInsets.only(bottom: 8.0),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Expanded(
-                    flex: 4,
+                    flex: 2,
+                    child: Image.asset(
+                      'assets/icons/nvicon.png',
+                      color: Colors.green,
+                    )),
+                Expanded(
+                    flex: 40,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Expanded(flex: 1, child: Image.asset('assets/icons/nvicon.png', color: Colors.green,)),
                             Expanded(
                                 flex: 10, child: Text(data[index]['dish_name']))
                           ],
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Container(),
-                            Container(),
+                            Container(
+                              child: Text(
+                                  '${data[index]['dish_currency']} ${data[index]['dish_price']}'),
+                            ),
+                            Container(
+                              child: Text(
+                                  '${data[index]['dish_calories']} Calories'),
+                            ),
                           ],
                         ),
-                        Container(),
-                        Container(),
-                        Container(),
+                        Container(
+                          child: Text('${data[index]['dish_description']}'),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 25,
+                          width: MediaQuery.of(context).size.width / 4,
+                          decoration: new BoxDecoration(
+                              color: Colors
+                                  .green, //new Color.fromRGBO(255, 0, 0, 0.0),
+                              borderRadius:
+                                  new BorderRadius.all(Radius.circular(40.0))),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              GestureDetector(
+                                child: Text('+'),
+                                onTap: () => _count++,
+                              ),
+                              Text(_count.toString()),
+                              GestureDetector(
+                                child: Text('+'),
+                                onTap: () => _count++,
+                              )
+                            ],
+                          ),
+                        ),
+                        data[index]['addonCat'].length > 0
+                            ? Container(
+                                child: Text(
+                                  'Customization available',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              )
+                            : Container(),
                       ],
                     )),
                 Expanded(
-                  flex: 1,
+                  flex: 10,
                   child: Container(
                     height: 150,
                     child: Image.network(
