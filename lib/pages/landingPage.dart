@@ -6,7 +6,14 @@ class LandingPage extends StatefulWidget {
   _LandingPageState createState() => _LandingPageState();
 }
 
+FetchData _fetchData = FetchData();
+List<Map<String,dynamic>> response;
 class _LandingPageState extends State<LandingPage> {
+  @override
+  void initState() {
+    response = _fetchData.getDataFromAPI();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     List<Choice> choices = <Choice>[];
@@ -70,22 +77,32 @@ class _LandingPageState extends State<LandingPage> {
   }
 }
 
-class ChoiceCard extends StatelessWidget {
+class ChoiceCard extends StatefulWidget {
   const ChoiceCard({Key key, this.choice}) : super(key: key);
 
   final Choice choice;
 
   @override
+  _ChoiceCardState createState() => _ChoiceCardState();
+}
+
+class _ChoiceCardState extends State<ChoiceCard> {
+   @override
+  void initState() {
+    response = _fetchData.getDataFromAPI();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: response[0]['table_menu_list'][choice.index]
+        itemCount: response[0]['table_menu_list'][widget.choice.index]
                 ['category_dishes']
             .length,
         itemBuilder: (BuildContext context, int index) {
           final TextStyle heading1 = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
           final TextStyle heading2 = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
           var data =
-              response[0]['table_menu_list'][choice.index]['category_dishes'];
+              response[0]['table_menu_list'][widget.choice.index]['category_dishes'];
           int _count = 0;
           IncrementItem _incrementBloc = IncrementItem();
           final TextStyle textStyle =
