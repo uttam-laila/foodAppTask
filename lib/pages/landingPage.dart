@@ -69,21 +69,21 @@ class _LandingPageState extends State<LandingPage> {
                                 Positioned(
                                   left: 16,
                                   top: 3.0,
-                                    child: new Stack(
+                                    child: Stack(
                                   children: <Widget>[
-                                    new Icon(Icons.brightness_1,
+                                    Icon(Icons.brightness_1,
                                         size: 18.0, color: Colors.red[800]),
-                                    new Positioned(
+                                    Positioned(
                                         top: 4.0,
                                         right: 6.0,
-                                        child: new Center(
+                                        child: Center(
                                           child: StreamBuilder<int>(
                                             initialData: 0,
                                             stream: cartCountBloc.valueStream,
                                             builder: (context, snapshot) {
-                                              return new Text(
+                                              return Text(
                                                 snapshot.data.toString(),
-                                                style: new TextStyle(
+                                                style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 11.0,
                                                     fontWeight: FontWeight.w500),
@@ -228,10 +228,10 @@ class _ChoiceCardState extends State<ChoiceCard> {
                               child: Container(
                                 height: MediaQuery.of(context).size.height / 25,
                                 width: MediaQuery.of(context).size.width / 4,
-                                decoration: new BoxDecoration(
+                                decoration: BoxDecoration(
                                     color: Colors
-                                        .green, //new Color.fromRGBO(255, 0, 0, 0.0),
-                                    borderRadius: new BorderRadius.all(
+                                        .green, //Color.fromRGBO(255, 0, 0, 0.0),
+                                    borderRadius: BorderRadius.all(
                                         Radius.circular(40.0))),
                                 child: Row(
                                   mainAxisAlignment:
